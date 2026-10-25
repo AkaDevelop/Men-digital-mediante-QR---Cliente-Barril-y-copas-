@@ -1,5 +1,8 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbz0cZ5m6Wrvg6MHMrA9AAVL4ULzkXx02xVypn2K-aUXjwmNTd6ptmyCjaKalEN_VlfP/exec";
 
+let allProducts = [];
+let selectedCategoryId = null;
+let currentCategories = [];
 
 async function loadMenu() {
     try {
@@ -17,9 +20,13 @@ async function loadMenu() {
             throw new Error("La API no pudo cargar el menú.");
         }
 
-        renderCategories(result.data.categories);
 
-        renderProducts(result.data.products);
+
+        allProducts = result.data.products;
+        currentCategories = result.data.categories;
+
+        renderCategories(currentCategories);
+        renderProducts(allProducts);
 
         console.log("Menú cargado correctamente:", result);
 
@@ -28,6 +35,7 @@ async function loadMenu() {
     }
 }
 
+
 function renderCategories(categories) {
     const container = document.getElementById(
         "categories-container"
@@ -35,12 +43,47 @@ function renderCategories(categories) {
 
     container.innerHTML = "";
 
+    // Botón para mostrar todos los productos
+    const allButton = document.createElement("button");
+
+    allButton.textContent = "Todos";
+
+    allButton.className =
+        "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors " +
+        (selectedCategoryId === null
+            ? "bg-gray-900 text-white"
+            : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100");
+
+    allButton.addEventListener("click", function () {
+        selectCategory(null);
+    });
+
+    container.appendChild(allButton);
+
+    // Botones de las categorías
     categories.forEach(function (category) {
         const button = document.createElement("button");
 
         button.textContent = category.name;
-
         button.dataset.categoryId = category.id;
+
+        const isSelected =
+            selectedCategoryId === Number(category.id);
+
+        button.className =
+            "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors " +
+            (isSelected
+                ? "bg-gray-900 text-white"
+                : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100");
+
+        button.setAttribute(
+            "aria-pressed",
+            String(isSelected)
+        );
+
+        button.addEventListener("click", function () {
+            selectCategory(Number(button.dataset.categoryId));
+        });
 
         container.appendChild(button);
     });
@@ -160,6 +203,24 @@ function renderProducts(products) {
 
         container.appendChild(card);
     });
+}
+
+function selectCategory(categoryId) {
+    selectedCategoryId = categoryId;
+
+    if (selectedCategoryId === null) {
+        renderProducts(allProducts);
+    } else {
+        const filteredProducts = allProducts.filter(
+            function (product) {
+                return product.categoryId === selectedCategoryId;
+            }
+        );
+
+        renderProducts(filteredProducts);
+    }
+
+    renderCategories(currentCategories);
 }
 
 
