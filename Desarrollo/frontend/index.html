@@ -8,44 +8,107 @@
     <meta name="description" content="Encuentra las mejores marcas de licores, cervezas y vinos en un solo lugar. 
     Disfruta de un gran ambiente en nuestro bar o pide a domicilio. ¡Visítanos hoy!">
     <title>Barrels & glasses | Digital QR Menu</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="./js/app.js" defer></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body class="min-h-screen bg-stone-50 text-stone-900">
+    <a href="https://www.instagram.com/jcjdevelop/" class="IG-float" target="_blank" rel="noopener noreferrer">
+        <img width="48" height="48" src="https://img.icons8.com/?size=100&id=Xy10Jcu1L2Su&format=png&color=000000"
+            alt="whatsapp--v1" />
+    </a>
+    <a href="https://wa.me/573000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <img width="48" height="48" src="https://img.icons8.com/color/48/whatsapp--v1.png" alt="whatsapp--v1" />
+    </a>
+    <header class="bg-stone-950 text-white">
+        <div class="mx-auto max-w-6xl px-4 py-8 text-center sm:py-12">
 
-    <header>
-        <h1>Barrels & glasses</h1>
-        <p>Digital Menu</p>
+            <p class="mb-2 text-sm font-medium uppercase tracking-[0.3em] text-amber-400">
+                Welcome Us
+            </p>
+
+            <h1 class="text-3xl font-bold tracking-wide sm:text-5xl">
+                Barrels & Glasses
+            </h1>
+
+            <p class="mt-3 text-sm text-stone-300 sm:text-base">
+                Discover our menu and enjoy anymoment
+            </p>
+
+            <div class="mx-auto mt-6 h-1 w-16 rounded-full bg-amber-500"></div>
+
+        </div>
     </header>
 
-    <main>
+    <main class="mx-auto max-w-6xl space-y-10 px-4 py-8 sm:py-12">
+
+        <!-- Navegación de categorías -->
         <section>
-            <h2>Categories</h2>
-                <nav
-                    id="categories-container"
-                    class="flex gap-2 overflow-x-auto py-2"
-                    aria-label="Categorías del menú"
-                >
-                </nav>
+            <div class="mb-5">
+                <p class="text-xs font-semibold uppercase tracking-widest text-amber-700">
+                    Explore our menu
+                </p>
+
+                <h2 class="mt-1 text-2xl font-bold text-stone-900 sm:text-3xl">
+                    Categories
+                </h2>
+            </div>
+
+            <nav id="categories-container" class="flex gap-2 overflow-x-auto py-2" aria-label="Categorías del menú">
+                <!-- JavaScript inserta aquí las categorías -->
+            </nav>
         </section>
 
+        <!-- Catálogo de productos -->
         <section>
-            <h2>Products</h2>
+            <div class="mb-5">
+                <p class="text-xs font-semibold uppercase tracking-widest text-amber-700">
+                    Our selection
+                </p>
 
-            <div id="products-container" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-               
+                <h2 class="mt-1 text-2xl font-bold text-stone-900 sm:text-3xl">
+                    Products
+                </h2>
+            </div>
+
+            <div id="products-container" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- JavaScript inserta aquí los productos -->
             </div>
         </section>
-    </main>
-    <footer>
 
+    </main>
+    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4" role="dialog"
+        aria-modal="true" aria-labelledby="modal-product-name">
+        <section class="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-xl">
+            <button id="close-product-modal" type="button"
+                class="absolute right-3 top-3 z-10 rounded-full bg-white px-3 py-2 text-xl shadow"
+                aria-label="Cerrar detalles del producto">
+                &times;
+            </button>
+
+            <div class="flex h-64 items-center justify-center bg-gray-100">
+                <img id="modal-product-image" alt="" class="hidden h-full w-full object-cover">
+
+                <p id="modal-image-placeholder" class="p-4 text-center text-sm text-gray-500">
+                    Imagen no disponible
+                </p>
+            </div>
+
+            <div class="space-y-3 p-6">
+                <h2 id="modal-product-name" class="text-2xl font-bold text-gray-900"></h2>
+
+                <p id="modal-product-size" class="hidden text-sm text-gray-500"></p>
+
+                <p id="modal-product-description" class="hidden leading-relaxed text-gray-600"></p>
+
+                <p id="modal-product-price" class="text-xl font-bold text-gray-900"></p>
+            </div>
+        </section>
+    </div>
+    <footer>
     </footer>
 
-
-
-    <script src="./js/app.js"></script>
 </body>
 
 </html>

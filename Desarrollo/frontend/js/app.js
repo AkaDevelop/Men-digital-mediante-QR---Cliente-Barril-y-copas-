@@ -46,13 +46,13 @@ function renderCategories(categories) {
     // Botón para mostrar todos los productos
     const allButton = document.createElement("button");
 
-    allButton.textContent = "Todos";
+    allButton.textContent = "All";
 
     allButton.className =
-        "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors " +
+        "shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors " +
         (selectedCategoryId === null
-            ? "bg-gray-900 text-white"
-            : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100");
+            ? "bg-amber-800 text-white shadow-sm"
+            : "border border-stone-300 bg-white text-stone-700 hover:border-amber-500 hover:text-amber-700");
 
     allButton.addEventListener("click", function () {
         selectCategory(null);
@@ -71,10 +71,10 @@ function renderCategories(categories) {
             selectedCategoryId === Number(category.id);
 
         button.className =
-            "shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors " +
+            "shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors " +
             (isSelected
-                ? "bg-gray-900 text-white"
-                : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100");
+                ? "bg-amber-800 text-white shadow-sm"
+                : "border border-stone-300 bg-white text-stone-700 hover:border-amber-500 hover:text-amber-700");
 
         button.setAttribute(
             "aria-pressed",
@@ -99,8 +99,7 @@ function renderProducts(products) {
 
     if (products.length === 0) {
         container.textContent =
-            "No hay productos disponibles en este momento.";
-
+            "For this category products, no avalible items.";
         return;
     }
 
@@ -108,13 +107,38 @@ function renderProducts(products) {
         const card = document.createElement("article");
 
         card.className =
-            "overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm";
+            "group overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg";
+
+        card.classList.add(
+            "cursor-pointer",
+            "transition-shadow",
+            "hover:shadow-md"
+        );
+
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("role", "button");
+
+        card.setAttribute(
+            "aria-label",
+            `Ver detalles de ${product.name}`
+        );
+
+        card.addEventListener("click", function () {
+            openProductModal(product);
+        });
+
+        card.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openProductModal(product);
+            }
+        });
 
         // Contenedor de la imagen
         const imageContainer = document.createElement("div");
 
         imageContainer.className =
-            "relative flex h-48 items-center justify-center bg-gray-100";
+            "relative flex h-52 items-center justify-center overflow-hidden bg-stone-100";
 
         // Imagen del producto
         const image = document.createElement("img");
@@ -122,17 +146,16 @@ function renderProducts(products) {
         image.alt = product.name;
 
         image.className =
-            "h-full w-full object-cover";
+            "h-full w-full object-cover transition-transform duration-500 group-hover:scale-105";
 
         image.hidden = true;
 
-        // Placeholder para imágenes ausentes o rotas
         const placeholder = document.createElement("div");
 
-        placeholder.textContent = "Imagen no disponible";
+        placeholder.textContent = "Image no avalible";
 
         placeholder.className =
-            "p-4 text-center text-sm text-gray-500";
+            "p-4 text-center text-sm text-stone-500";
 
         imageContainer.append(image, placeholder);
 
@@ -160,7 +183,7 @@ function renderProducts(products) {
         name.textContent = product.name;
 
         name.className =
-            "text-lg font-semibold text-gray-900";
+            "text-lg font-semibold text-stone-900";
 
         details.appendChild(name);
 
@@ -169,7 +192,7 @@ function renderProducts(products) {
 
             size.textContent = product.size;
 
-            size.className = "text-sm text-gray-500";
+            size.className = "text-sm text-stone-500";
 
             details.appendChild(size);
         }
@@ -180,7 +203,7 @@ function renderProducts(products) {
             description.textContent = product.description;
 
             description.className =
-                "text-sm text-gray-600";
+                "text-sm text-stone-600";
 
             details.appendChild(description);
         }
@@ -194,11 +217,11 @@ function renderProducts(products) {
         }).format(product.price);
 
         price.className =
-            "text-lg font-bold text-gray-900";
+            "text-lg font-bold text-stone-900";
 
         details.appendChild(price);
 
-        // Construir la tarjeta e insertarla en el DOM
+        // Construye la tarjeta y la inserta en el DOM
         card.append(imageContainer, details);
 
         container.appendChild(card);
@@ -222,6 +245,122 @@ function selectCategory(categoryId) {
 
     renderCategories(currentCategories);
 }
+
+
+function openProductModal(product) {
+    const modal = document.getElementById("product-modal");
+
+    const image = document.getElementById(
+        "modal-product-image"
+    );
+
+    const placeholder = document.getElementById(
+        "modal-image-placeholder"
+    );
+
+    const name = document.getElementById(
+        "modal-product-name"
+    );
+
+    const size = document.getElementById(
+        "modal-product-size"
+    );
+
+    const description = document.getElementById(
+        "modal-product-description"
+    );
+
+    const price = document.getElementById(
+        "modal-product-price"
+    );
+
+    // Nombre
+    name.textContent = product.name;
+
+    // Tamaño: solo mostrarlo si tiene contenido
+    size.textContent = product.size || "";
+    size.classList.toggle("hidden", !product.size);
+
+    // Descripción: también es opcional
+    description.textContent = product.description || "";
+    description.classList.toggle(
+        "hidden",
+        !product.description
+    );
+
+    // Precio en pesos colombianos
+    price.textContent = new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
+    }).format(product.price);
+
+    // Restablecer la imagen antes de cargar la nueva
+    image.hidden = true;
+    placeholder.hidden = false;
+    image.removeAttribute("src");
+    image.alt = product.name;
+
+    if (product.image) {
+        image.onload = function () {
+            image.hidden = false;
+            placeholder.hidden = true;
+        };
+
+        image.onerror = function () {
+            image.hidden = true;
+            placeholder.hidden = false;
+        };
+
+        image.src = product.image;
+    }
+
+    // Mostrar el modal
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+
+    document.body.style.overflow = "hidden";
+
+    document.getElementById("close-product-modal").focus();
+}
+
+function closeProductModal() {
+    const modal = document.getElementById("product-modal");
+
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+
+    document.body.style.overflow = "";
+}
+
+const productModal = document.getElementById("product-modal");
+
+const closeModalButton = document.getElementById(
+    "close-product-modal"
+);
+
+// Cerrar con el botón
+closeModalButton.addEventListener("click", function () {
+    closeProductModal();
+});
+
+// Cerrar al pulsar el fondo oscuro
+productModal.addEventListener("click", function (event) {
+    if (event.target === productModal) {
+        closeProductModal();
+    }
+});
+
+// Cerrar con Escape
+document.addEventListener("keydown", function (event) {
+    if (
+        event.key === "Escape" &&
+        !productModal.classList.contains("hidden")
+    ) {
+        closeProductModal();
+    }
+});
+
 
 
 loadMenu();

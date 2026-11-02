@@ -3,3 +3,80 @@
     padding: 0;
     margin: 0;
 }
+
+.whatsapp-float{
+    width: 40px;
+    height: 40px;
+    position:fixed;
+    top: 90%;
+    border-radius: 50%;
+    box-shadow: 0px 2px 5px green;
+    margin-left: 95%;
+    background-color: #25d366;
+    align-items: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    transition: transform 0.3s ease;
+    animation: whatsapp-float-move 0.8s ease-in-out infinite; 
+    z-index: 1;
+}
+
+.whatsapp-float:hover{
+    transform: scale(1.1);
+    box-shadow: 0px 2px 15px green;
+}
+
+.IG-float{
+    width: 40px;
+    height: 40px;
+    position:fixed;
+    top: 80%;
+    border-radius: 50%;
+    box-shadow: 0px 2px 5px rgb(128, 0, 119);
+    margin-left: 95%;
+    background-color: none;
+    align-items: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    transition: transform 0.3s ease;
+    animation: whatsapp-float-move 0.8s ease-in-out infinite; 
+    z-index: 1;
+}
+
+.IG-float:hover{
+    transform: scale(1.1);
+    box-shadow: 0px 2px 15px rgb(117, 0, 128);
+}
+
+.whatsapp-float:hover{
+    transform: scale(1.1);
+    box-shadow: 0px 2px 15px green;
+}
+
+@keyframes whatsapp-float-move {
+    0%, 100% {
+        transform: translateY(0);
+    } 50%{
+        transform: translateY(-2px);
+    }
+}
+
+@media(max-width: 900px){
+    .IG-float{
+        margin-left: 90%;
+    }
+
+    .whatsapp-float{
+        margin-left: 90%;
+    }
+}
+
+@media(max-width: 420px){
+    .IG-float{
+        margin-left: 85%;
+    }
+
+    .whatsapp-float{
+        margin-left: 85%;
+    }
+}
